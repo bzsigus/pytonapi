@@ -2,6 +2,7 @@ from fastapi import APIRouter, HTTPException
 from typing import List
 from .models import Event
 from .file_storage import EventFileManager
+from .event_analyzer import EventAnalyzer
 
 
 router = APIRouter()
@@ -93,7 +94,15 @@ async def delete_event(event_id: int):
     
     raise HTTPException(status_code=404, detail="Event not found")
 
-
+#változtatást igényel
 @router.get("/events/joiners/multiple-meetings")
 async def get_joiners_multiple_meetings():
-    pass
+    manager = EventFileManager()
+    events = manager.read_events_from_file()
+    
+    if not events:
+        raise HTTPException(status_code=404, detail="No events found")
+    
+    joiners_multiple_meetings = EventAnalyzer.get_joiners_multiple_meetings_method(events)
+    
+    return  joiners_multiple_meetings
