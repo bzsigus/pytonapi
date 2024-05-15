@@ -7,7 +7,6 @@ class Organizer(BaseModel):
     email: str
 
 
-
 class Joiner(BaseModel):
     name: str
     email: str
